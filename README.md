@@ -1,10 +1,8 @@
 # Unofficial PHP SDK for EnZona
 
-<aside class="warning">
-This is a work in progress, there are rough corners and the 
+***This is a work in progress, there are rough corners and the 
 API can change witouth previuos warnings. 
-Not recommended for production use.
-</aside>
+Not recommended for production usage.***
 
 This is a PHP library that allows interaction with 
 [EnZona's API](https://api.enzona.net).
