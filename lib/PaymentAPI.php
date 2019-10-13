@@ -23,18 +23,11 @@ class PaymentAPI extends BaseAPI
 {
 
     /**
-     * The Payment API host
+     * The API route in host
      *
      * @var string
      */
-    protected $host = 'https://api.enzona.net/payment/v1.0.0';
-
-    /**
-     * The Payment API Sandbox host
-     *
-     * @var string
-     */
-    protected $sandboxHost = 'https://apisandbox.enzona.net/payment/v1.0.0';
+    protected $apiRoute = '/payment/v1.0.0';
 
     /**
      * Payment API configuration object
@@ -61,7 +54,7 @@ class PaymentAPI extends BaseAPI
             $this->config = $config;
         } else {
             $this->config = new Configuration();
-            $this->config->setHost($this->useSandbox ? $this->sandboxHost : $this->host);
+            $this->config->setHost($this->host . $this->apiRoute);
         }
     }
 

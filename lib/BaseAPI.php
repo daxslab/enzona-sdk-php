@@ -2,7 +2,9 @@
 
 namespace daxslab\enzona;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\BadResponseException;
 
 class BaseAPI
 {
@@ -15,12 +17,32 @@ class BaseAPI
     protected $host = '';
 
     /**
-     * The Payment API Sandbox host
+     * The default Payment API host
      *
      * @var string
      */
-    protected $sandboxHost = '';
+    protected $apiHost = 'https://api.enzona.net';
 
+    /**
+     * The default Payment API Sandbox host
+     *
+     * @var string
+     */
+    protected $apiSandboxHost = 'https://apisandbox.enzona.net';
+
+    /**
+     * The API route in host
+     *
+     * @var string
+     */
+    protected $apiRoute = '';
+
+    /**
+     * The route for requesting access token in host
+     *
+     * @var string
+     */
+    protected $accessTokenRoute = '/token';
 
     /**
      * Define if SDK will use the EnZona sandbox
@@ -62,6 +84,62 @@ class BaseAPI
         $this->client = $client;
         $this->config = $config;
         $this->headerSelector= $headerSelector;
+
+        $this->host = $this->useSandbox ? $this->apiSandboxHost : $this->apiHost;
+
+    }
+
+    /**
+     * Return the API Host
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Set the API Host
+     *
+     * @param string $host
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
+        $this->config->setHost($this->host . $this->apiRoute);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiRoute()
+    {
+        return $this->apiRoute;
+    }
+
+    /**
+     * @param string $apiRoute
+     */
+    public function setApiRoute($apiRoute)
+    {
+        $this->apiRoute = $apiRoute;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccessTokenRoute()
+    {
+        return $this->accessTokenRoute;
+    }
+
+    /**
+     * @param string $accessTokenRoute
+     */
+    public function setAccessTokenRoute($accessTokenRoute)
+    {
+        $this->accessTokenRoute = $accessTokenRoute;
     }
 
     /**
@@ -110,6 +188,30 @@ class BaseAPI
     public function setHeaderSelector($headerSelector)
     {
         $this->headerSelector = $headerSelector;
+    }
+
+    /**
+     * Requests an access token and return it
+     *
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
+     */
+    public function requestAccessToken($customer_key, $customer_secret){
+        $client = new Client();
+        $res = $client->request('POST', $this->host . $this->accessTokenRoute, [
+            'auth' => [$customer_key, $customer_secret],
+            'form_params' => [
+                'grant_type' => 'client_credentials'
+            ]
+        ]);
+
+        if ($res->getStatusCode() != 200)
+            throw new \Exception('Error with status code: '. $res->getStatusCode() . 'and body: ' . $res->getBody());
+        elseif ($res->getHeader('content-type')[0] != 'application/json')
+            throw new \Exception('Invalid response content-type: '. $res->getHeader('content-type')[0] . ' required: application/json');
+
+        return json_decode($res->getBody())->access_token;
     }
 
     /**

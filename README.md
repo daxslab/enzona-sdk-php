@@ -56,8 +56,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Creates an API instance
 $paymentsAPI = new daxslab\enzona\PaymentAPI();
 
+// Get access token
+$accessToken = $paymentsAPI->requestAccessToken('YOUR_CONSUMER_KEY', 'YOUR_CONSUMER_SECRET');
+
 // Configure OAuth2 access token for authorization: default
-$paymentsAPI->setAccessToken('YOUR_ACCESS_TOKEN');
+$paymentsAPI->setAccessToken($accessToken);
 
 // creates an api endpoint object
 $apiObject = $paymentsAPI->listRefundsPayment();
