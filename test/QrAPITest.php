@@ -35,23 +35,23 @@ class QrAPITest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCreatePersonsPaymentQr()
+    public function testCreateQrAccount()
     {
         $qrAPI = new QrAPI();
 
         $this->assertInstanceOf(
             PermiteCrearUnQRParaHacerUnPagoEntrePersonas_Api::class,
-            $qrAPI->createPersonsPaymentQr()
+            $qrAPI->createQrAccount()
         );
     }
 
-    public function testCreateCommercePaymentQr()
+    public function testCreateQrMerchant()
     {
         $qrAPI = new QrAPI();
 
         $this->assertInstanceOf(
             PermiteCrearUnQRDePagoAUnComercioApi::class,
-            $qrAPI->createCommercePaymentQr()
+            $qrAPI->createQrMerchant()
         );
     }
 
@@ -61,7 +61,7 @@ class QrAPITest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             ObtieneLaInformacinDeUnQRApi::class,
-            $qrAPI->qrInfo()
+            $qrAPI->qrCode()
         );
     }
 }

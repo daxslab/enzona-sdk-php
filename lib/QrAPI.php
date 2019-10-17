@@ -54,7 +54,7 @@ class QrAPI extends BaseAPI
      *
      * @return PermiteCrearUnQRDePagoAUnComercioApi
      */
-    public function createCommercePaymentQr(){
+    public function createQrMerchant(){
         return new PermiteCrearUnQRDePagoAUnComercioApi($this->client, $this->config, $this->headerSelector);
     }
 
@@ -63,7 +63,7 @@ class QrAPI extends BaseAPI
      *
      * @return PermiteCrearUnQRParaHacerUnPagoEntrePersonas_Api
      */
-    public function createPersonsPaymentQr(){
+    public function createQrAccount(){
         return new PermiteCrearUnQRParaHacerUnPagoEntrePersonas_Api($this->client, $this->config, $this->headerSelector);
     }
 
@@ -72,7 +72,7 @@ class QrAPI extends BaseAPI
      *
      * @return ObtieneLaInformacinDeUnQRApi
      */
-    public function qrInfo(){
+    public function qrCode(){
         return new ObtieneLaInformacinDeUnQRApi($this->client, $this->config, $this->headerSelector);
     }
 
