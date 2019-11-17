@@ -4,7 +4,6 @@ namespace daxslab\enzona;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\BadResponseException;
 
 class BaseAPI
 {
@@ -193,17 +192,20 @@ class BaseAPI
     /**
      * Requests an access token and return it
      *
+     * @param $customer_key
+     * @param $customer_secret
+     * @param string $scope
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Exception
      */
-    public function requestAccessToken($customer_key, $customer_secret){
+    public function requestAccessToken($customer_key, $customer_secret, $scope='enzona_business_payment'){
         $client = new Client();
         $res = $client->request('POST', $this->host . $this->accessTokenRoute, [
             'auth' => [$customer_key, $customer_secret],
             'form_params' => [
-                'grant_type' => 'client_credentials'
-            ]
+                'scope' => $scope,
+                'grant_type' => 'client_credentials',
+            ],
         ]);
 
         if ($res->getStatusCode() != 200)
