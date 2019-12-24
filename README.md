@@ -1,5 +1,7 @@
 # Unofficial PHP SDK for EnZona
 
+[![Build Status](https://travis-ci.org/daxslab/enzona-sdk-php.svg?branch=master)](https://travis-ci.org/daxslab/enzona-sdk-php)
+
 ***This is a work in progress, there are rough corners and the 
 API can change witouth previuos warnings. 
 Not recommended for production usage.***
