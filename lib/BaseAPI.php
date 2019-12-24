@@ -8,6 +8,9 @@ use GuzzleHttp\ClientInterface;
 class BaseAPI
 {
 
+    const SCOPE_PAYMENT = 'enzona_business_payment';
+    const SCOPE_QR = 'enzona_business_qr';
+
     /**
      * The Payment API host
      *
@@ -194,18 +197,19 @@ class BaseAPI
      *
      * @param $customer_key
      * @param $customer_secret
-     * @param string $scope
+     * @param array $scopes
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function requestAccessToken($customer_key, $customer_secret, $scope='enzona_business_payment'){
+    public function requestAccessToken($customer_key, $customer_secret, $scopes=[self::SCOPE_PAYMENT]){
+        $body_scope = implode('+', $scopes);
         $client = new Client();
         $res = $client->request('POST', $this->host . $this->accessTokenRoute, [
             'auth' => [$customer_key, $customer_secret],
-            'form_params' => [
-                'scope' => $scope,
-                'grant_type' => 'client_credentials',
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded'
             ],
+            'body' => "grant_type=client_credentials&scope=$body_scope"
         ]);
 
         if ($res->getStatusCode() != 200)
