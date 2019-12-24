@@ -11,7 +11,7 @@ This is a PHP library that allows interaction with
 
 ## Requeriments
 
-PHP 5.5 and later but using the latest version of PHP is highly 
+PHP 7.0 and later but using the latest version of PHP is highly 
 recommended and must be installed the following PHP extensions:
 
 - curl
