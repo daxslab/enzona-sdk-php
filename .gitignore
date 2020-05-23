@@ -13,3 +13,6 @@ composer.lock
 
 ### PhpStorm ###
 /.idea/
+
+# custom tests folder
+/custom_tests/

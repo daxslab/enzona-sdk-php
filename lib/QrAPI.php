@@ -50,6 +50,15 @@ class QrAPI extends BaseAPI
     }
 
     /**
+     * @inheritDoc
+     */
+    public function requestAccessToken($customer_key, $customer_secret, $scopes = [self::SCOPE_QR])
+    {
+        return parent::requestAccessToken($customer_key, $customer_secret, $scopes);
+    }
+
+
+    /**
      * Returns a create commerce payment QR API Object
      *
      * @return PermiteCrearUnQRDePagoAUnComercioApi

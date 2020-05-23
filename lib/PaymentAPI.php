@@ -59,6 +59,15 @@ class PaymentAPI extends BaseAPI
     }
 
     /**
+     * @inheritDoc
+     */
+    public function requestAccessToken($customer_key, $customer_secret, $scopes = [self::SCOPE_PAYMENT])
+    {
+        return parent::requestAccessToken($customer_key, $customer_secret, $scopes);
+    }
+
+
+    /**
      * Returns a create payment API Object
      *
      * @return PermiteCrearUnPagoApi
