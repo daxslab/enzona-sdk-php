@@ -24,10 +24,20 @@ To install the bindings via [Composer](http://getcomposer.org/), add the followi
 
 ```
 {
+  "minimum-stability": "dev",
+  "prefer-stable" : true,
   "repositories": [
     {
       "type": "git",
       "url": "https://github.com/daxslab/enzona-sdk-php.git"
+    },
+    {
+      "type":"git",
+      "url": "https://github.com/daxslab/enzona-qr-php.git"
+    },
+    {
+      "type":"git",
+      "url": "https://github.com/daxslab/enzona-payment-php.git"
     }
   ],
   "require": {
