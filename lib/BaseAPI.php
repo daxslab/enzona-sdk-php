@@ -83,7 +83,7 @@ class BaseAPI
     public function __construct($useSandbox=false, $client=null, $config=null, $headerSelector=null)
     {
         $this->useSandbox = $useSandbox;
-        $this->client = $client;
+        $this->client = $client ?: new Client();
         $this->config = $config;
         $this->headerSelector= $headerSelector;
 
@@ -203,13 +203,12 @@ class BaseAPI
      */
     public function requestAccessToken($customer_key, $customer_secret, $scopes=[self::SCOPE_PAYMENT]){
         $body_scope = implode('+', $scopes);
-        $client = new Client();
-        $res = $client->request('POST', $this->host . $this->accessTokenRoute, [
+        $res = $this->client->request('POST', $this->host . $this->accessTokenRoute, [
             'auth' => [$customer_key, $customer_secret],
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded'
             ],
-            'body' => "grant_type=client_credentials&scope=$body_scope"
+            'body' => "grant_type=client_credentials&scope=$body_scope",
         ]);
 
         if ($res->getStatusCode() != 200)
