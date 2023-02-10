@@ -2,8 +2,14 @@
 
 namespace daxslab\enzona;
 
+use daxslab\enzona\payment\Configuration as PaymentConfiguration;
+use daxslab\enzona\payment\HeaderSelector as PaymentHeaderSelector;
+use daxslab\enzona\qr\Configuration as QrConfiguration;
+use daxslab\enzona\qr\HeaderSelector as QrHeaderSelector;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 
 class BaseAPI
 {
@@ -63,14 +69,14 @@ class BaseAPI
     /**
      * Payment API configuration object
      *
-     * @var Configuration
+     * @var PaymentConfiguration | QrConfiguration
      */
     protected $config;
 
     /**
      * HeaderSelector object
      *
-     * @var HeaderSelector
+     * @var PaymentHeaderSelector | QrHeaderSelector
      */
     protected $headerSelector;
 
@@ -78,7 +84,9 @@ class BaseAPI
     /**
      * EnZona constructor.
      * @param bool $useSandbox
-     * @param null $config
+     * @param ClientInterface $client
+     * @param PaymentConfiguration | QrConfiguration $config
+     * @param PaymentHeaderSelector | QrHeaderSelector $headerSelector
      */
     public function __construct($useSandbox=false, $client=null, $config=null, $headerSelector=null)
     {
@@ -161,7 +169,7 @@ class BaseAPI
     }
 
     /**
-     * @return Configuration
+     * @return PaymentConfiguration | QrConfiguration
      */
     public function getConfig()
     {
@@ -169,7 +177,7 @@ class BaseAPI
     }
 
     /**
-     * @param Configuration $config
+     * @param PaymentConfiguration | QrConfiguration $config
      */
     public function setConfig($config)
     {
@@ -177,7 +185,7 @@ class BaseAPI
     }
 
     /**
-     * @return HeaderSelector
+     * @return PaymentHeaderSelector | QrHeaderSelector
      */
     public function getHeaderSelector()
     {
@@ -185,7 +193,7 @@ class BaseAPI
     }
 
     /**
-     * @param HeaderSelector $headerSelector
+     * @param PaymentHeaderSelector | QrHeaderSelector $headerSelector
      */
     public function setHeaderSelector($headerSelector)
     {
@@ -195,11 +203,12 @@ class BaseAPI
     /**
      * Requests an access token and return it
      *
-     * @param $customer_key
-     * @param $customer_secret
+     * @param string $customer_key
+     * @param string $customer_secret
      * @param array $scopes
      * @return string
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
+     * @throws Exception
      */
     public function requestAccessToken($customer_key, $customer_secret, $scopes=[self::SCOPE_PAYMENT]){
         $body_scope = implode('+', $scopes);
@@ -212,9 +221,9 @@ class BaseAPI
         ]);
 
         if ($res->getStatusCode() != 200)
-            throw new \Exception('Error with status code: '. $res->getStatusCode() . 'and body: ' . $res->getBody());
+            throw new Exception('Error with status code: '. $res->getStatusCode() . 'and body: ' . $res->getBody());
         elseif ($res->getHeader('content-type')[0] != 'application/json')
-            throw new \Exception('Invalid response content-type: '. $res->getHeader('content-type')[0] . ' required: application/json');
+            throw new Exception('Invalid response content-type: '. $res->getHeader('content-type')[0] . ' required: application/json');
 
         return json_decode($res->getBody())->access_token;
     }
